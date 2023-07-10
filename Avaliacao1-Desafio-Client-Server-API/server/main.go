@@ -79,9 +79,15 @@ func cotacao(w http.ResponseWriter, r *http.Request) {
 	db_cotacao := USDBRL{Bid: cotacao.USDBRL.Bid}
 
 	//Timeout máximo para conseguir persistir os dados no banco deverá ser de 10ms:
-	ctxDB, cancelDB := context.WithTimeout(context.Background(), time.Millisecond*10)
+	ctxDB, cancelDB := context.WithTimeout(context.Background(), time.Nanosecond*1)
 	defer cancelDB()
-	db.WithContext(ctxDB).Create(&db_cotacao)
+
+	result := db.WithContext(ctxDB).Create(&db_cotacao)
+
+	if result.Error != nil {
+		log.Println(result.Error)
+		fmt.Fprintf(os.Stderr, "Erro ao gravar no banco de dados: %v\n", result.Error)
+	}
 
 	fmt.Println("Info do BD:", cotacao.USDBRL.Bid)
 }

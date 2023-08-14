@@ -37,12 +37,14 @@ func cotacao(w http.ResponseWriter, r *http.Request) {
 
 	var urlCotacao = "https://economia.awesomeapi.com.br/json/last/USD-BRL"
 
+//Cria a conexão com a API externa, e instancia o método GET para requisição:
 	request, err := http.NewRequestWithContext(ctxAPI, "GET", urlCotacao, nil)
 	if err != nil {
 		log.Println(err)
 		fmt.Fprintf(os.Stderr, "Erro ao realizar o request na API externa: %v\n", err)
 	}
 
+//Executa a requisição instanciada anteriormente (metodo GET:
 	response, err := http.DefaultClient.Do(request)
 	if err != nil {
 		log.Println("Erro ao realizar o request a URL externa:", err)
